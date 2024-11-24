@@ -3,25 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mywebapp.dao;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+
 public class DAO {
-    public static Connection con;
-     
-    public DAO(){
-        if(con == null){
-            String dbUrl = "jdbc:sqlserver://localhost:1433;databaseName=model;integratedSecurity=true";
-            String dbClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+
+    private static final String URL = "jdbc:sqlserver://DESKTOP-BRTUO67\\SERVER_PTTKHT:1433;databaseName=model;encrypt=true;trustServerCertificate=true";
+//    private static final String USER = "yourUsername";
+//    private static final String PASSWORD = "yourPassword";
+
  
-            try {
-                Class.forName(dbClass);
-                con = DriverManager.getConnection (dbUrl );
-                System.out.println("Kết nối thành công!");
-                
-                con.close();
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
+    public boolean testConnection() {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection conn = DriverManager.getConnection(URL,"sa","123456");
+            System.out.println("Kết nối thành công!");
+            System.out.println(conn);
+            return true; // Kết nối thành công
+        } catch (Exception e) {
+            System.out.println("Kết nối thất bại: " + e.getMessage());
+            return false; // Kết nối thất bại
         }
     }
 }
