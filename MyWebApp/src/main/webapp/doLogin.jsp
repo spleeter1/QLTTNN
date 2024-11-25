@@ -15,15 +15,7 @@
 
     MemberDAO dao = new MemberDAO();
     boolean kq = dao.checkLogin(tv);
-    
-    System.out.println(tv.getId() + "    " + tv.getRole() );
-    
-    String tvJson = "{ "
-            + "\"id\": \"" + tv.getId() + "\", "
-            + "\"username\": \"" + tv.getUsername() + "\", "
-            + "\"password\": \"" + tv.getPassword() + "\", "
-            + "\"role\": \"" + tv.getRole() + "\" "
-            + "}";
+
     if (kq) {
         if ("Student".equalsIgnoreCase(tv.getRole())) {
             session.setAttribute("student", tv);
@@ -34,11 +26,10 @@
         }
     } else {
 
-//        response.sendRedirect("login.jsp?err=fail");
+        response.sendRedirect("login.jsp?err=fail");
     }
 
 %>
 <script>
-    console.log(<%= tvJson%>);
     console.log(<%= kq %>);
 </script>

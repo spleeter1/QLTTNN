@@ -4,14 +4,36 @@
     Author     : NAMPC
 --%>
 
+<%@page import="com.mywebapp.dao.MemberDAO"%>
+<%@page import="com.mywebapp.model.Student"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="com.mywebapp.model.Member"%>
 
 <%
-    Member studMember = (Member) session.getAttribute("student");
-//    if (studMember == null) {
-//        response.sendRedirect("login.jsp");
-//        return;
-//    }
+    Member member = (Member) session.getAttribute("student");
+//    System.out.println(studMember.getUsername());
+
+    if (member == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    Student student = new Student();
+
+    student.setId(member.getId());
+    student.setUsername(member.getUsername());
+    student.setPassword(member.getPassword());
+    student.setHoTen(member.getHoTen());
+    student.setEmail(member.getEmail());
+    student.setSdt(member.getSdt());
+    student.setNoiSinh(member.getNoiSinh());
+    student.setRole(member.getRole());
+    student.setDob(member.getDob());
+
+    int id = student.getId();
+    MemberDAO dao = new MemberDAO();
+    String stuID = dao.geStudentInfor(id);
+    student.setStudentId(stuID);
+    session.setAttribute("student", student);
+
 %>
 
 <!DOCTYPE html>
@@ -21,9 +43,9 @@
         <title>Student Home</title>
     </head>
     <body>
-        <h1>Welcome, <%= studMember.getUsername() %></h1>
+        <h1>Welcome, <%= student.getStudentId() %></h1>
         <ul>
-            <li><a href="Profile.jsp">Manage Profile</li>
+            <li><a href="personalInfor.jsp">Manage Profile</li>
             <li><a href="Registration.jsp">Registration</li>
             <li><a href="logout.jsp">Logout</li>
         </ul>

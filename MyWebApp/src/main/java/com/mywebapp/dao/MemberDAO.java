@@ -39,9 +39,13 @@ public class MemberDAO extends DAO {
             if (rs.next()) {
                 tv.setId(rs.getInt("ID"));
                 tv.setRole(rs.getString("role"));
-                System.out.println(rs.getString("role"));
-                System.out.println(tv.getRole());
-                
+                tv.setUsername(rs.getString("username"));
+                tv.setPassword(rs.getString("password"));
+                tv.setHoTen(rs.getString("hoTen"));
+                tv.setDob(rs.getString("dob"));
+                tv.setEmail(rs.getString("email"));
+                tv.setNoiSinh(rs.getString("noiSinh"));
+                tv.setSdt(rs.getString("sdt"));
                 kq=true;
             }
         } catch (Exception e) {
@@ -50,13 +54,14 @@ public class MemberDAO extends DAO {
     }
     
     public String geStudentInfor(int id){
-        String sql = "SELECT * FROM Students WHERE id = {id}";
+        String sql = "SELECT * FROM Student WHERE id = ?";
         String msv = "";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                msv =  rs.getString("studentId");
+                msv =  rs.getString("studentID");
+                System.out.println(msv);
             }
         }
         catch(Exception e){

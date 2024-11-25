@@ -8,7 +8,6 @@ package com.mywebapp.model;
  *
  * @author NAMPC
  */
-import com.mywebapp.model.Member;
 
 public class Student extends Member {
 
@@ -30,5 +29,19 @@ public class Student extends Member {
     public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
-
+    
+    @Override
+public String toString() {
+    return "Student{" +
+           "id=" + getId() +
+           ", username='" + getUsername() + '\'' +
+           ", hoTen='" + getHoTen() + '\'' +
+           ", email='" + getEmail() + '\'' +
+           ", sdt='" + getSdt() + '\'' +
+           ", noiSinh='" + getNoiSinh() + '\'' +
+           ", role='" + getRole() + '\'' +
+           ", dob='" + getDob() + '\'' +
+           ", studentId='" + studentId + '\'' +
+           '}';
+}
 }

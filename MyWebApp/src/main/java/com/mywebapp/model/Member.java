@@ -106,5 +106,18 @@ public class Member {
         this.dob = dob;
     }
     
+    @Override
+    public String toString(){
+        return "Member{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", hoTen='" + hoTen + '\'' +
+            ", email='" + email + '\'' +
+            ", sdt='" + sdt + '\'' +
+            ", noiSinh='" + noiSinh + '\'' +
+            ", role='" + role + '\'' +
+            ", dob='" + dob + '\'' +
+            '}';
+    }
     
 }
