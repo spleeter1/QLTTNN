@@ -26,9 +26,11 @@ public class DAO {
     }
     protected Connection getConnection() throws SQLException {
         try {
-            // Kiểm tra driver trước khi tạo kết nối
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(URL, "sa","123456"); 
+             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection conn = DriverManager.getConnection(URL,"sa","123456");
+            System.out.println("Kết nối thành công!");
+            System.out.println(conn);
+            return conn;
         } catch (ClassNotFoundException e) {
             throw new SQLException("Driver không tìm thấy: " + e.getMessage());
         }

@@ -3,10 +3,16 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+           <script>
+            // Chuyển hướng sau 3 giây
+            setTimeout(function() {
+                window.location.href = "login.jsp";
+            }, 200);
+        </script>
     </head>
     <body>
         <h1>Hello World!</h1>
         <h1>Redirecting to login page...</h1>
-        <p>If you are not redirected automatically, click <a href="home.jsp">here</a>.</p>
+        <p>If you are not redirected automatically, click <a href="login.jsp">here</a>.</p>
     </body>
 </html>

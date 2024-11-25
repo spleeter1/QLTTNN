@@ -8,25 +8,37 @@
 <%
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    
+
     Member tv = new Member();
     tv.setUsername(username);
     tv.setPassword(password);
-    
+
     MemberDAO dao = new MemberDAO();
     boolean kq = dao.checkLogin(tv);
     
+    System.out.println(tv.getId() + "    " + tv.getRole() );
+    
+    String tvJson = "{ "
+            + "\"id\": \"" + tv.getId() + "\", "
+            + "\"username\": \"" + tv.getUsername() + "\", "
+            + "\"password\": \"" + tv.getPassword() + "\", "
+            + "\"role\": \"" + tv.getRole() + "\" "
+            + "}";
     if (kq) {
-        if ("sinhvien".equalsIgnoreCase(tv.getRole())) {
-            session.setAttribute("student", tv); 
-            response.sendRedirect("sv/studentHome.jsp");
+        if ("Student".equalsIgnoreCase(tv.getRole())) {
+            session.setAttribute("student", tv);
+            response.sendRedirect("StudentHome.jsp");
         } else if ("teacher".equalsIgnoreCase(tv.getRole())) {
-            session.setAttribute("teacher", tv); 
-            response.sendRedirect("gv/teacherHome.jsp");
+            session.setAttribute("teacher", tv);
+            response.sendRedirect("TeacherHome.jsp");
         }
     } else {
-        response.sendRedirect("gddangnhap.jsp?err=fail");
-    }
-    
-%>
 
+//        response.sendRedirect("login.jsp?err=fail");
+    }
+
+%>
+<script>
+    console.log(<%= tvJson%>);
+    console.log(<%= kq %>);
+</script>

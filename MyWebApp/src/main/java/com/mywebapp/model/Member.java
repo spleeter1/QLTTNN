@@ -22,6 +22,18 @@ public class Member {
     public Member() {
     }
 
+    public Member(int id, String username, String password, String hoTen, String email, String sdt, String noiSinh, String role, String dob) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.hoTen = hoTen;
+        this.email = email;
+        this.sdt = sdt;
+        this.noiSinh = noiSinh;
+        this.role = role;
+        this.dob = dob;
+    }
+    
     public int getId() {
         return id;
     }

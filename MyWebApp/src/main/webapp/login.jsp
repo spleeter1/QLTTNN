@@ -20,7 +20,7 @@
       }
       %>
 <h2> Đăng nhập </h2>
-    <form name="dangnhap" action="doDangnhap.jsp" method="post">
+    <form name="dangnhap" action="doLogin.jsp" method="post">
         <table border="0">
             <tr>
                 <td>Tên đăng nhập:</td>
