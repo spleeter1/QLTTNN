@@ -33,6 +33,8 @@
     String stuID = dao.geStudentInfor(id);
     student.setStudentId(stuID);
     session.setAttribute("student", student);
+//    lưu ý student và studentTmp đang lưu cùng 1 đối tượng :)
+    session.setAttribute("studentTmp", student);
 
 %>
 
