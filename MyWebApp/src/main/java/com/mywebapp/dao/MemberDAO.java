@@ -9,6 +9,7 @@ import com.mywebapp.model.Student;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -46,27 +47,44 @@ public class MemberDAO extends DAO {
                 tv.setEmail(rs.getString("email"));
                 tv.setNoiSinh(rs.getString("noiSinh"));
                 tv.setSdt(rs.getString("sdt"));
-                kq=true;
+                kq = true;
             }
         } catch (Exception e) {
         }
         return kq;
     }
-    
-    public String geStudentInfor(int id){
+
+    public String geStudentInfor(int id) {
         String sql = "SELECT * FROM Student WHERE id = ?";
         String msv = "";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                msv =  rs.getString("studentID");
+            if (rs.next()) {
+                msv = rs.getString("studentID");
                 System.out.println(msv);
             }
+        } catch (Exception e) {
+
         }
-        catch(Exception e){
-            
+        return msv;
+    }
+
+    public boolean updatePersonalInfor(int userId, Member newInfor) {
+        String sql = "UPDATE Members SET hoTen = ?, email = ?, sdt = ?, dob = ?, noiSinh = ? WHERE id = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newInfor.getHoTen());
+            ps.setString(2, newInfor.getEmail());
+            ps.setString(3, newInfor.getSdt());
+            ps.setString(4, newInfor.getDob());
+            ps.setString(5, newInfor.getNoiSinh());
+            ps.setInt(6, userId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }finally{
         }
-        return  msv;
     }
 }

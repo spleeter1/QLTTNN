@@ -20,7 +20,7 @@
 
     student.setId(member.getId());
     student.setUsername(member.getUsername());
-    student.setPassword(member.getPassword());
+//    student.setPassword(member.getPassword());
     student.setHoTen(member.getHoTen());
     student.setEmail(member.getEmail());
     student.setSdt(member.getSdt());
@@ -33,8 +33,9 @@
     String stuID = dao.geStudentInfor(id);
     student.setStudentId(stuID);
     session.setAttribute("student", student);
-//    lưu ý student và studentTmp đang lưu cùng 1 đối tượng :)
-    session.setAttribute("studentTmp", student);
+    
+    Student studentTmp = new Student(student.getId(), student.getUsername(),"", student.getHoTen(), student.getEmail(), student.getSdt(), student.getNoiSinh(), "",student.getDob(), student.getStudentId());
+    session.setAttribute("studentTmp", studentTmp);
 
 %>
 

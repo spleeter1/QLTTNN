@@ -4,7 +4,50 @@
     Author     : NAMPC
 --%>
 
+<%@page import="com.mywebapp.model.Member"%>
+<%@page import="com.mywebapp.dao.MemberDAO"%>
+<%@page import="com.mywebapp.model.Student"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    Student studentTmp = (Student) session.getAttribute("studentTmp");
+    Student student = (Student) session.getAttribute("student");
+    String action = request.getParameter("action");
+    if ("confirm".equals(action)) {
+        try {
+            MemberDAO dao = new MemberDAO();
+            Member member = new Member();
+            member.setId(studentTmp.getId());
+            member.setHoTen(studentTmp.getHoTen());
+            member.setEmail(studentTmp.getEmail());
+            member.setDob(studentTmp.getDob());
+            member.setNoiSinh(studentTmp.getNoiSinh());
+            member.setSdt(studentTmp.getSdt());
+
+            boolean res = dao.updatePersonalInfor(member.getId(), member);
+            if (res) {
+                student.setHoTen(member.getHoTen());
+                student.setDob(member.getDob());
+                student.setEmail(member.getEmail());
+                student.setSdt(member.getSdt());
+                student.setNoiSinh(member.getNoiSinh());
+
+                session.setAttribute("student", student);
+                out.println("<script>");
+                out.println("alert('Thông tin cá nhân đã được cập nhật thành công!');");
+                out.println("window.location.href = 'StudentHome.jsp';");
+                out.println("</script>");
+//            response.sendRedirect("Student Home");
+            } else {
+                out.println("<script>");
+                out.println("alert('Thông tin cá nhân đã được cập nhật thất bại!');");
+                out.println("window.location.href = 'personalInfor.jsp';");
+                out.println("</script>");
+            }
+        } catch (Exception e) {
+
+        }
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -72,11 +115,11 @@
                 Bạn có chắc chắn muốn lưu thay đổi thông tin cá nhân không?
             </div>
             <div class="button-container">
-                <form action="personalInfor.jsp" method="post">
+                <form action="ConfirmPersonalInfor.jsp" method="post">
                     <button type="submit" name="action" value="confirm" class="confirm-button">Có</button>
                 </form>
                 <a href="personalInfor.jsp">
-                    <button class="cancel-button">Không</button>
+                    <button  class="cancel-button">Không</button>
                 </a>
             </div>
         </div>

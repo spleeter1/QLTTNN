@@ -9,12 +9,15 @@
 <% Student student = (Student) session.getAttribute("student");
     Student studentTmp = (Student) session.getAttribute("studentTmp");
     String action = request.getParameter("action");
+    System.out.println(action);
     if ("cancel".equals(action)) {
-        session.setAttribute("studentTmp", student);
-        studentTmp = (Student) session.getAttribute("studentTmp");
-        System.out.println(studentTmp);
-    } else if ("save".equals(action)) {
-        System.out.println(studentTmp);
+        studentTmp.setHoTen(student.getHoTen());
+        studentTmp.setEmail(student.getEmail());
+        studentTmp.setSdt(student.getSdt());
+        studentTmp.setDob(student.getDob());
+        studentTmp.setNoiSinh(student.getNoiSinh());
+        session.setAttribute("studentTmp", studentTmp);
+//        System.out.println(studentTmp);
     }
 %>
 
@@ -106,7 +109,7 @@
             <div class="button-container">
                 <button type="submit" name="action" value="cancel">Huỷ</button>
                 <a href="editPersonalInfor.jsp"><button type="button" name="action" value="edit">Sửa</button></a>
-                <a href="ConfirmPersonalInfor.jsp" ><button type="submit" name="action" value="save">Lưu</button></a>
+                <a href="ConfirmPersonalInfor.jsp" ><button type="button" name="action" value="save">Lưu</button></a>
             </div>
         </form>
     </body>

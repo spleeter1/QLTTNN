@@ -9,17 +9,15 @@
 <%   Student studentTmp = (Student) session.getAttribute("studentTmp");
     String action = request.getParameter("action");
     if ("close".equals(action)) {
-        studentTmp = new Student();
+//        studentTmp = new Student();
         studentTmp.setHoTen(request.getParameter("hoTen"));
         studentTmp.setEmail(request.getParameter("email"));
         studentTmp.setSdt(request.getParameter("sdt"));
         studentTmp.setDob(request.getParameter("dob"));
         studentTmp.setNoiSinh(request.getParameter("noiSinh"));
         session.setAttribute("studentTmp", studentTmp);
-        System.out.println(session.getAttribute("student"));
         response.sendRedirect("personalInfor.jsp");
     } else if ("cancel".equals(action)) {
-        session.setAttribute("studentTmp",(Student) session.getAttribute("student"));
         response.sendRedirect("personalInfor.jsp");
     }
 %>
