@@ -16,37 +16,36 @@ import java.util.List;
  *
  * @author NAMPC
  */
-public class SubjectClassDAO extends DAO{
-    public SubjectClassDAO (){
+public class SubjectClassDAO extends DAO {
+
+    public SubjectClassDAO() {
         super();
     }
-    
-    public List<SubjectClass> getSubjectClasByMa(String maMon){
-         List<SubjectClass> subjectClassList = new ArrayList<>();
-        
+
+    public List<SubjectClass> getSubjectClasByMa(String maMon) {
+        List<SubjectClass> subjectClassList = new ArrayList<>();
+
         String sql = "SELECT * FROM LopHocPhan WHERE monHocMa = ?";
-        
-        try (Connection conn = getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, maMon);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    SubjectClass subjectClass = new SubjectClass(
-                            rs.getInt("id"),
-                            rs.getString("maLHP"),
-                            rs.getString("tenLHP"),
-                            rs.getInt("siSoMax"),
-                            rs.getInt("siSoThuc"),
-                            rs.getString("monHocMa")
-                    );
+                    SubjectClass subjectClass = new SubjectClass();
+                    subjectClass.setId(rs.getInt("id"));
+                    subjectClass.setMaLHP(rs.getString("maLHP"));
+                    subjectClass.setTenLHP(rs.getString("tenLHP"));
+                    subjectClass.setSiSoMax(rs.getInt("siSoMax"));
+                    subjectClass.setSiSoThuc(rs.getInt("siSoThuc"));
+                    subjectClass.setMonHocMa(rs.getString("monHocMa"));
 
                     subjectClassList.add(subjectClass);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
         return subjectClassList;
     }

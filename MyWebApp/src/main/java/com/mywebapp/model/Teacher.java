@@ -24,7 +24,7 @@ public class Teacher extends  Member{
         return teacherId;
     }
 
-    public void setStudentId(String teacherId) {
+    public void setTeacherId(String teacherId) {
         this.teacherId = teacherId;
     }
 }

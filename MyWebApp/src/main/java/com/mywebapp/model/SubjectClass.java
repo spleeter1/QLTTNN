@@ -4,6 +4,8 @@
  */
 package com.mywebapp.model;
 
+import java.util.List;
+
 /**
  *
  * @author NAMPC
@@ -16,17 +18,19 @@ public class SubjectClass {
     private int siSoMax;
     private int siSoThuc;
     private String monHocMa;
+    private List<BuoiHoc> buoiHocs;
 
     public SubjectClass() {
     }
 
-    public SubjectClass(int id, String maLHP, String tenLHP, int siSoMax, int siSoThuc, String monHocMa) {
+    public SubjectClass(int id, String maLHP, String tenLHP, int siSoMax, int siSoThuc, String monHocMa, List<BuoiHoc> buoiHocs) {
         this.id = id;
         this.maLHP = maLHP;
         this.tenLHP = tenLHP;
         this.siSoMax = siSoMax;
         this.siSoThuc = siSoThuc;
         this.monHocMa = monHocMa;
+        this.buoiHocs = buoiHocs;
     }
 
     public int getId() {
@@ -77,6 +81,14 @@ public class SubjectClass {
         this.monHocMa = monHocMa;
     }
 
+    public List<BuoiHoc> getBuoiHocs() {
+        return buoiHocs;
+    }
+
+    public void setBuoiHocs(List<BuoiHoc> buoiHocs) {
+        this.buoiHocs = buoiHocs;
+    }
+
     @Override
     public String toString() {
         return "SubjectClass{"
@@ -86,6 +98,7 @@ public class SubjectClass {
                 + ", siSoMax=" + siSoMax
                 + ", siSoThuc=" + siSoThuc
                 + ", monHocMa='" + monHocMa + '\''
+                + "\n buoiHoc=\n" + buoiHocs
                 + "}\n";
     }
 

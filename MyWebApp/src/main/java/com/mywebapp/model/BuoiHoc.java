@@ -11,21 +11,21 @@ package com.mywebapp.model;
 public class BuoiHoc {
 
     private int id;
-    private String teacherId;
-    private int kipId;
-    private String phongHocTen;
-    private String lopHocPhanMa;
+    private Teacher teacher;
+    private Kip kip;
+    private Day day;
+    private Room room;
     private String moTa;
 
     public BuoiHoc() {
     }
 
-    public BuoiHoc(int id, String teacherId, int kipId, String phongHocTen, String lopHocPhanMa, String moTa) {
+    public BuoiHoc(int id, Teacher teacher, Kip kip, Day day, Room room, String moTa) {
         this.id = id;
-        this.teacherId = teacherId;
-        this.kipId = kipId;
-        this.phongHocTen = phongHocTen;
-        this.lopHocPhanMa = lopHocPhanMa;
+        this.teacher = teacher;
+        this.kip = kip;
+        this.day = day;
+        this.room = room;
         this.moTa = moTa;
     }
 
@@ -37,36 +37,36 @@ public class BuoiHoc {
         this.id = id;
     }
 
-    public String getTeacherId() {
-        return teacherId;
+    public Teacher getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
-    public int getKipId() {
-        return kipId;
+    public Kip getKip() {
+        return kip;
     }
 
-    public void setKipId(int kipId) {
-        this.kipId = kipId;
+    public void setKip(Kip kip) {
+        this.kip = kip;
     }
 
-    public String getPhongHocTen() {
-        return phongHocTen;
+    public Day getDay() {
+        return day;
     }
 
-    public void setPhongHocTen(String phongHocTen) {
-        this.phongHocTen = phongHocTen;
+    public void setDay(Day day) {
+        this.day = day;
     }
 
-    public String getLopHocPhanMa() {
-        return lopHocPhanMa;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setLopHocPhanMa(String lopHocPhanMa) {
-        this.lopHocPhanMa = lopHocPhanMa;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public String getMoTa() {
@@ -76,15 +76,17 @@ public class BuoiHoc {
     public void setMoTa(String moTa) {
         this.moTa = moTa;
     }
+    
+    
 
     @Override
     public String toString() {
         return "BuoiHoc{"
                 + "id=" + id
-                + ", teacherId='" + teacherId + '\''
-                + ", kipId=" + kipId
-                + ", phongHocTen='" + phongHocTen + '\''
-                + ", lopHocPhanMa='" + lopHocPhanMa + '\''
+                + ", teacherId='" + teacher.getId() + '\''
+                + ", kipId=" + kip.getId()
+                + ", ngay=" + day.getTen() + '\''
+                + ", phongHocTen='" + room.getTen() + '\''
                 + ", moTa='" + moTa + '\''
                 + "}\n";
     }

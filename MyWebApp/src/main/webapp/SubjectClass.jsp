@@ -4,6 +4,8 @@
     Author     : NAMPC
 --%>
 
+<%@page import="com.mywebapp.model.BuoiHoc"%>
+<%@page import="com.mywebapp.dao.BuoiHocDAO"%>
 <%@page import="com.mywebapp.dao.SubjectClassDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -16,10 +18,15 @@
     if (maMon != null && !maMon.isEmpty()) {
         SubjectClassDAO subjectClassDAO = new SubjectClassDAO();
         scList = subjectClassDAO.getSubjectClasByMa(maMon);
-
+        
+        BuoiHocDAO buoiHocDAO = new BuoiHocDAO();
+        for (SubjectClass sc : scList) {
+            List<BuoiHoc> buoiHocs = buoiHocDAO.getBuoiHocByMaLHP(sc.getMaLHP());
+            sc.setBuoiHocs(buoiHocs);
+        }
         session.setAttribute("subjectClasses",scList);
     }
-//    System.out.println(scList);
+    System.out.println(scList);
 %>
 <!DOCTYPE html>
 <html>

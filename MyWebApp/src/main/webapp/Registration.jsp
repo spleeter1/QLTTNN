@@ -4,17 +4,32 @@
     Author     : NAMPC
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.mywebapp.dao.RegistrationDAO"%>
 <%@page import="com.mywebapp.dao.SubjectDAO"%>
 <%@page import="com.mywebapp.model.Subject"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mywebapp.model.Student"%>
+<%@page import="com.mywebapp.model.Registration" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% Student student = (Student) session.getAttribute("studentTmp");
-    SubjectDAO subjectDAO = new SubjectDAO();
-    List<Subject> subjects = subjectDAO.getSubjects();
 
-    session.setAttribute("subjectList", subjects);
-    System.out.println(subjects);
+<% 
+    Student student = (Student) session.getAttribute("studentTmp");
+
+//    List<Subject> subjects = (List<Subject>) session.getAttribute("subjectList");
+//    if (subjects == null) {
+//        SubjectDAO subjectDAO = new SubjectDAO();
+//        subjects = subjectDAO.getSubjects();
+//        session.setAttribute("subjectList", subjects);
+//    }
+
+    List<Registration> registrations = (List<Registration>) session.getAttribute("currRegistration");
+    if (registrations == null) {
+        RegistrationDAO registrationDAO = new RegistrationDAO();
+        String stuID = student.getStudentId();
+        registrations = registrationDAO.getRegistrationByStudentID(stuID);
+        session.setAttribute("currRegistration", registrations); 
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -31,9 +46,35 @@
         </form>
 
         <h2>Danh sách môn đăng kí</h2>
-        <form>
 
-        </form>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã Môn</th>
+                    <th>Mã LHP</th>
+                    <th>Tên LHP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    int stt = 1;
+                    for (Registration registration : registrations) {
+                        String maMon = registration.getLhp().getMonHocMa();
+                        String maLHP = registration.getLhp().getMaLHP(); 
+                        String tenLHP = registration.getLhp().getTenLHP(); 
+%>
+                <tr>
+                    <td><%= stt++%></td>
+                    <td><%= maMon%></td>
+                    <td><%= maLHP%></td>
+                    <td><%= tenLHP%></td>
+                </tr>
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
 
 
     </body>
