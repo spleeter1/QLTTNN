@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class DAO {
 
-    private static final String URL = "jdbc:sqlserver://DESKTOP-BRTUO67\\SERVER_PTTKHT:1433;databaseName=model;encrypt=true;trustServerCertificate=true";
+    private static final String URL = "jdbc:sqlserver://DESKTOP-BRTUO67\\SERVER_PTTKHT:1433;databaseName=PTTK_QLTTNN;encrypt=true;trustServerCertificate=true";
 
     public boolean testConnection() {
         try {
