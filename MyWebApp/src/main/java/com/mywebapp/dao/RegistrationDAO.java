@@ -61,9 +61,9 @@ public class RegistrationDAO extends DAO {
     }
 
     public boolean updateRegistrationSC(Registration registration) {
-        String selectSQL = "SELECT siSoThuc, siSoMax FROM LopHocPhan WHERE maLHP = ? FOR UPDATE";
+        String selectSQL = "SELECT siSoThuc, siSoMax FROM LopHocPhan WITH (UPDLOCK) WHERE maLHP = ? ";
         String updateSQL = "UPDATE LopHocPhan SET siSoThuc = siSoThuc + 1 WHERE maLHP = ? AND siSoThuc < siSoMax";
-        String insertSQL = "INSERT INTO Registration (studentID, maLHP) VALUES (?, ?)";
+        String insertSQL = "INSERT INTO DangKyHoc (studentID, maLHP) VALUES (?, ?)";
 
         Connection conn = null;
 
@@ -134,17 +134,64 @@ public class RegistrationDAO extends DAO {
             }
         }
     }
-    
-        public boolean deleteRegistration(String studentId, String maLHP) {
-        String sql = "DELETE FROM Registration WHERE studentID = ? AND maLHP = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, studentId);
-            ps.setString(2, maLHP);
-            int result = ps.executeUpdate();
-            return result > 0;
+
+    public boolean deleteRegistration(String studentId, String maLHP) {
+        String deleteSQL = "DELETE FROM DangKyHoc WHERE studentID = ? AND maLHP = ?";
+        String updateSQL = "UPDATE LopHocPhan SET siSoThuc = siSoThuc - 1 WHERE maLHP = ? AND siSoThuc > 0";
+
+        Connection conn = null;
+
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false);
+
+            // 1. Xóa đăng ký trong bảng DangKyHoc
+            try (PreparedStatement psDelete = conn.prepareStatement(deleteSQL)) {
+                psDelete.setString(1, studentId);
+                psDelete.setString(2, maLHP);
+
+                int deletedRows = psDelete.executeUpdate();
+                if (deletedRows == 0) {
+                    System.out.println("Không tìm thấy đăng ký cần xóa.");
+                    return false;
+                }
+            }
+
+            // 2. Cập nhật sĩ số thực tế của lớp học phần
+            try (PreparedStatement psUpdate = conn.prepareStatement(updateSQL)) {
+                psUpdate.setString(1, maLHP);
+                int updatedRows = psUpdate.executeUpdate();
+
+                if (updatedRows == 0) {
+                    System.out.println("Không thể giảm sĩ số thực tế, có thể sĩ số đã bằng 0.");
+                    return false;
+                }
+            }
+
+            conn.commit();
+            System.out.println("Hủy đăng ký thành công và cập nhật sĩ số.");
+            return true;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    System.err.println("Đã rollback do lỗi: " + e.getMessage());
+                } catch (SQLException rollbackEx) {
+                    System.err.println("Lỗi khi rollback: " + rollbackEx.getMessage());
+                }
+            }
+            return false;
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Kết nối đã được đóng.");
+                } catch (SQLException closeEx) {
+                    System.err.println("Lỗi khi đóng kết nối: " + closeEx.getMessage());
+                }
+            }
         }
-        return false;
     }
 }

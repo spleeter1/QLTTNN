@@ -37,11 +37,11 @@ public class BuoiHocDAO extends DAO{
             while (rs.next()) {
                 BuoiHoc buoiHoc = new BuoiHoc();
                 buoiHoc.setId(rs.getInt("id"));
-
+                
                 Teacher teacher = new Teacher(); 
                 teacher.setTeacherId(rs.getString("teacherID"));
                 Kip kip = new Kip(); 
-                kip.setId(rs.getInt("id"));
+                kip.setId(rs.getInt("kipId"));
                 Day day = new Day(); 
                 day.setTen(rs.getString("ngayHocTen"));
                 Room room = new Room();

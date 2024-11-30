@@ -83,7 +83,7 @@ public class BuoiHoc {
     public String toString() {
         return "BuoiHoc{"
                 + "id=" + id
-                + ", teacherId='" + teacher.getId() + '\''
+                + ", teacherId='" + teacher.getTeacherId() + '\''
                 + ", kipId=" + kip.getId()
                 + ", ngay=" + day.getTen() + '\''
                 + ", phongHocTen='" + room.getTen() + '\''

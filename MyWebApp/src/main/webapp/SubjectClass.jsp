@@ -22,28 +22,73 @@
         return;
     }
 
-    String maMon = request.getParameter("subjectId");
-    List<SubjectClass> scList = new ArrayList<>();
+    String maMon = null;
+    String subjectId = request.getParameter("subjectId");
 
+    if (subjectId != null && !subjectId.isEmpty()) {
+
+        maMon = subjectId;
+        session.setAttribute("maMonSelected", maMon);
+    } else if (session.getAttribute("maMonSelected") != null) {
+
+        maMon = (String) session.getAttribute("maMonSelected");
+    } else {
+        out.println("<script>alert('Mã môn học không hợp lệ hoặc không có thông tin môn học.');</script>");
+    }
+
+    List<Registration> registrations = (List<Registration>) session.getAttribute("currRegistration");
+    System.out.println(registrations);
+    List<SubjectClass> scList = (List<SubjectClass>) session.getAttribute("subjectClasses");
+    if (scList == null) {
+        if (maMon != null && !maMon.isEmpty()) {
+            SubjectClassDAO subjectClassDAO = new SubjectClassDAO();
+            scList = subjectClassDAO.getSubjectClasByMa(maMon);
+//            System.out.println(scList);
+            
+            BuoiHocDAO buoiHocDAO = new BuoiHocDAO();
+            for (SubjectClass sc : scList) {
+                List<BuoiHoc> buoiHocs = buoiHocDAO.getBuoiHocByMaLHP(sc.getMaLHP());
+                sc.setBuoiHocs(buoiHocs);
+                
+
+                // Kiểm tra xem student đã đăng ký lớp học này chưa
+                boolean isRegistered = false;
+                for (Registration reg : registrations) {
+                    if (reg.getLhp().getMaLHP().equals(sc.getMaLHP())) {
+                        isRegistered = true;
+                        break;
+                    }
+                }
+                sc.setRegistered(isRegistered);
+            }
+            
+            session.setAttribute("subjectClasses", scList);
+        }
+//        System.out.println(scList);
+    }
     String action = request.getParameter("action");
     String maLHP = request.getParameter("maLHP");
 
     if ("register".equals(action)) {
-    
+
         SubjectClass subjectClass = null;
         for (SubjectClass sc : scList) {
-            if (sc.getMaLHP().equals(maLHP)) {
+            if (maLHP.equals(sc.getMaLHP())) {
                 subjectClass = sc;
+//                System.out.println(subjectClass);
                 break;
             }
         }
-
+        System.out.println(subjectClass);
+        System.out.println(action);
+        System.out.println(maLHP);
         if (subjectClass != null) {
             RegistrationDAO registrationDAO = new RegistrationDAO();
             Registration regTmp = new Registration();
             regTmp.setHocVien(student);
             regTmp.setLhp(subjectClass);
-
+            
+            
             boolean success = registrationDAO.updateRegistrationSC(regTmp);
             if (success) {
                 out.println("<script>alert('Đăng ký thành công!');</script>");
@@ -55,33 +100,16 @@
         RegistrationDAO registrationDAO = new RegistrationDAO();
         boolean success = registrationDAO.deleteRegistration(studentId, maLHP);
         if (success) {
+            String stuID = student.getStudentId();
+            registrations = registrationDAO.getRegistrationByStudentID(stuID);
+            session.setAttribute("currRegistration", registrations);
             out.println("<script>alert('Hủy đăng ký thành công!');</script>");
         } else {
             out.println("<script>alert('Hủy đăng ký thất bại!');</script>");
         }
     }
 
-    if (maMon != null && !maMon.isEmpty()) {
-        SubjectClassDAO subjectClassDAO = new SubjectClassDAO();
-        scList = subjectClassDAO.getSubjectClasByMa(maMon);
-
-        BuoiHocDAO buoiHocDAO = new BuoiHocDAO();
-        for (SubjectClass sc : scList) {
-            List<BuoiHoc> buoiHocs = buoiHocDAO.getBuoiHocByMaLHP(sc.getMaLHP());
-            sc.setBuoiHocs(buoiHocs);
-
-            boolean isRegistered = false;
-            for (Registration reg : registrations) {
-                if (reg.getLhp().getMaLHP().equals(sc.getMaLHP())) {
-                    isRegistered = true;
-                    break;
-                }
-            }
-            sc.setRegistered(isRegistered);
-        }
-        session.setAttribute("subjectClasses", scList);
-    }
-    System.out.println(scList);
+//    System.out.println(scList);
 %>
 <!DOCTYPE html>
 <html>
@@ -104,8 +132,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%
-                        if (scList != null && !scList.isEmpty()) {
+                    <%                        if (scList != null && !scList.isEmpty()) {
                             for (SubjectClass subjectClass : scList) {
                     %>
                     <tr>
@@ -115,10 +142,18 @@
                         <td><%= subjectClass.getSiSoMax()%></td>
                         <td><%= subjectClass.getSiSoThuc()%></td>
 
-                        <td><%= subjectClass.getBuoiHocs().get(0).getDay().getTen()%></td>
+                        <td>
+                            <%
+                                if (subjectClass.getBuoiHocs() != null && !subjectClass.getBuoiHocs().isEmpty()) {
+                                    out.println(subjectClass.getBuoiHocs().get(0).getDay().getTen());
+                                } else {
+                                    out.println("Chưa có buổi học");
+                                }
+                            %>
+                        </td>
                         <td>
                             <!-- comment    <form action="Registration.jsp" method="POST">
-                                <input type="hidden" name="maLHP" value="<%= //subjectClass.getMaLHP()%>" />
+                                <input type="hidden" name="maLHP" value="= //subjectClass.getMaLHP()%>" />
 
                             </form>
                             -->
