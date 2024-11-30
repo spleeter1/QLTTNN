@@ -31,11 +31,16 @@
     int id = student.getId();
     MemberDAO dao = new MemberDAO();
     String stuID = dao.geStudentInfor(id);
+     session.setAttribute("currStudentID",stuID );
     student.setStudentId(stuID);
+    
+   
     session.setAttribute("student", student);
     
     Student studentTmp = new Student(student.getId(), student.getUsername(),"", student.getHoTen(), student.getEmail(), student.getSdt(), student.getNoiSinh(), "",student.getDob(), student.getStudentId());
     session.setAttribute("studentTmp", studentTmp);
+    
+    
 
 %>
 

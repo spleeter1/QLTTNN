@@ -19,6 +19,7 @@ public class SubjectClass {
     private int siSoThuc;
     private String monHocMa;
     private List<BuoiHoc> buoiHocs;
+    private boolean registered;
 
     public SubjectClass() {
     }
@@ -87,6 +88,14 @@ public class SubjectClass {
 
     public void setBuoiHocs(List<BuoiHoc> buoiHocs) {
         this.buoiHocs = buoiHocs;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 
     @Override
