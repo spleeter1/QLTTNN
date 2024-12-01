@@ -13,14 +13,17 @@ public class Registration {
     private int id;
     private Student hocVien;
     private SubjectClass lhp;
-
+    private long discount;
+    private long price;
     public Registration() {
     }
 
-    public Registration(int id, Student hocVien, SubjectClass lhp) {
+    public Registration(int id, Student hocVien, SubjectClass lhp, long discount,long price) {
         this.id = id;
         this.hocVien = hocVien;
         this.lhp = lhp;
+        this.discount = discount;
+        this.price = price;
     }
 
     public int getId() {
@@ -47,12 +50,31 @@ public class Registration {
         this.lhp = lhp;
     }
 
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public long getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(long discount) {
+        this.discount = discount;
+    }
+    
+    
     @Override
     public String toString() {
         return "Registration{"
                 + "id=" + id
                 + ", hocVien=" +  hocVien.getStudentId()
                 + ", lhp=" + lhp.getMaLHP()
+                + ", giam=" + discount
+                + ", phaiTra=" + price
                 + "}\n";
     }
 }

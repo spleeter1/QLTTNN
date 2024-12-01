@@ -20,9 +20,9 @@
         if ("Student".equalsIgnoreCase(tv.getRole())) {
             session.setAttribute("student", tv);
             response.sendRedirect("StudentHome.jsp");
-        } else if ("teacher".equalsIgnoreCase(tv.getRole())) {
-            session.setAttribute("teacher", tv);
-            response.sendRedirect("TeacherHome.jsp");
+        } else if ("Accountant".equalsIgnoreCase(tv.getRole())) {
+            session.setAttribute("accountant", tv);
+            response.sendRedirect("AccountantHome.jsp");
         }
     } else {
 

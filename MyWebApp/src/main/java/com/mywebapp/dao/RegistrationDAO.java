@@ -194,4 +194,55 @@ public class RegistrationDAO extends DAO {
             }
         }
     }
+
+    public List<Registration> getStudentPaymentInfo(int studentId) {
+        List<Registration> registrationList = new ArrayList<>();
+        String query = """
+            SELECT 
+                dkh.id ,
+                dkh.studentID,
+                lhp.maLHP,
+                lhp.tenLHP,
+                mh.ten ,
+                mh.gia ,
+                dkh.mienGiam, ,
+                dkh.phaiTra 
+            FROM 
+                DangKyHoc dkh
+            JOIN 
+                LopHocPhan lhp ON dkh.lopHocPhanMa = lhp.maLHP
+            JOIN 
+                MonHoc mh ON lhp.monHocMa = mh.maMon
+            WHERE 
+                dkh.studentID = ?;
+        """;
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, studentId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Khởi tạo các đối tượng cần thiết
+                    Student student = new Student();
+                    student.setStudentId(rs.getString("studentID"));
+
+                    SubjectClass subjectClass = new SubjectClass();
+                    subjectClass.setMaLHP(rs.getString("maLHP"));
+                    subjectClass.setTenLHP(rs.getString("tenLHP"));
+
+                    Registration registration = new Registration();
+                    registration.setId(rs.getInt("id"));
+                    registration.setHocVien(student);
+                    registration.setLhp(subjectClass);
+                    registration.setDiscount(rs.getLong("mienGiam"));
+                    registration.setPrice(rs.getLong("phaiTra"));
+
+                    registrationList.add(registration);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return registrationList;
+    }
 }

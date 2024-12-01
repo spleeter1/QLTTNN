@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -70,6 +72,22 @@ public class MemberDAO extends DAO {
         return msv;
     }
 
+    public String getAccountantInfor(int id) {
+        String sql = "SELECT * FROM Accountant WHERE id = ?";
+        String mnv = "";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                mnv = rs.getString("accountantID");
+                System.out.println(mnv);
+            }
+        } catch (Exception e) {
+
+        }
+        return mnv;
+    }
+
     public boolean updatePersonalInfor(int userId, Member newInfor) {
         String sql = "UPDATE Members SET hoTen = ?, email = ?, sdt = ?, dob = ?, noiSinh = ? WHERE id = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -84,7 +102,33 @@ public class MemberDAO extends DAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        }finally{
+        } finally {
         }
+    }
+
+    public List<Student> getListStudent() {
+        List<Student> stuList = new ArrayList<>();
+        String sql = "  SELECT Student.studentID,username,hoTen,email,dob,sdt\n"
+                + "  FROM Members \n"
+                + "  INNER JOIN Student ON Members.id = Student.id\n"
+                + "  WHERE Members.role = 'Student'";
+         
+         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Student student = new Student();
+             
+                student.setStudentId(rs.getString("studentID"));
+                student.setUsername(rs.getString("username"));
+                student.setHoTen(rs.getString("hoTen"));
+                student.setDob(rs.getString("dob"));
+                student.setEmail(rs.getString("email"));
+                student.setSdt(rs.getString("sdt"));
+                stuList.add(student);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stuList;
     }
 }
