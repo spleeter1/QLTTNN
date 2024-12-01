@@ -61,9 +61,9 @@ public class RegistrationDAO extends DAO {
     }
 
     public boolean updateRegistrationSC(Registration registration) {
-        String selectSQL = "SELECT siSoThuc, siSoMax FROM LopHocPhan WITH (UPDLOCK) WHERE maLHP = ? ";
+        String selectSQL = "SELECT siSoThuc, siSoMax FROM LopHocPhan WITH (UPDLOCK,ROWLOCK) WHERE maLHP = ? ";
         String updateSQL = "UPDATE LopHocPhan SET siSoThuc = siSoThuc + 1 WHERE maLHP = ? AND siSoThuc < siSoMax";
-        String insertSQL = "INSERT INTO DangKyHoc (studentID, maLHP) VALUES (?, ?)";
+        String insertSQL = "INSERT INTO DangKyHoc (studentID, lopHocPhanMa) VALUES (?, ?)";
 
         Connection conn = null;
 
@@ -136,7 +136,7 @@ public class RegistrationDAO extends DAO {
     }
 
     public boolean deleteRegistration(String studentId, String maLHP) {
-        String deleteSQL = "DELETE FROM DangKyHoc WHERE studentID = ? AND maLHP = ?";
+        String deleteSQL = "DELETE FROM DangKyHoc WHERE studentID = ? AND lopHocPhanMa = ?";
         String updateSQL = "UPDATE LopHocPhan SET siSoThuc = siSoThuc - 1 WHERE maLHP = ? AND siSoThuc > 0";
 
         Connection conn = null;

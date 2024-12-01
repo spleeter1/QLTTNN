@@ -13,7 +13,7 @@
 <%@page import="com.mywebapp.model.Registration" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<% 
+<%
     Student student = (Student) session.getAttribute("studentTmp");
 
 //    List<Subject> subjects = (List<Subject>) session.getAttribute("subjectList");
@@ -22,14 +22,14 @@
 //        subjects = subjectDAO.getSubjects();
 //        session.setAttribute("subjectList", subjects);
 //    }
+//    List<Registration> registrations = (List<Registration>) session.getAttribute("currRegistration");
+//    if (registrations == null) {
+    RegistrationDAO registrationDAO = new RegistrationDAO();
+    List<Registration> registrations = new ArrayList<>();
+    String stuID = student.getStudentId();
+    registrations = registrationDAO.getRegistrationByStudentID(stuID);
+    session.setAttribute("currRegistration", registrations);
 
-    List<Registration> registrations = (List<Registration>) session.getAttribute("currRegistration");
-    if (registrations == null) {
-        RegistrationDAO registrationDAO = new RegistrationDAO();
-        String stuID = student.getStudentId();
-        registrations = registrationDAO.getRegistrationByStudentID(stuID);
-        session.setAttribute("currRegistration", registrations); 
-    }
 %>
 <!DOCTYPE html>
 <html>
@@ -61,9 +61,9 @@
                     int stt = 1;
                     for (Registration registration : registrations) {
                         String maMon = registration.getLhp().getMonHocMa();
-                        String maLHP = registration.getLhp().getMaLHP(); 
-                        String tenLHP = registration.getLhp().getTenLHP(); 
-%>
+                        String maLHP = registration.getLhp().getMaLHP();
+                        String tenLHP = registration.getLhp().getTenLHP();
+                %>
                 <tr>
                     <td><%= stt++%></td>
                     <td><%= maMon%></td>

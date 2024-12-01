@@ -39,17 +39,17 @@
     List<Registration> registrations = (List<Registration>) session.getAttribute("currRegistration");
     System.out.println(registrations);
     List<SubjectClass> scList = (List<SubjectClass>) session.getAttribute("subjectClasses");
+//    List<SubjectClass> scList = new ArrayList<>();
     if (scList == null) {
         if (maMon != null && !maMon.isEmpty()) {
             SubjectClassDAO subjectClassDAO = new SubjectClassDAO();
             scList = subjectClassDAO.getSubjectClasByMa(maMon);
 //            System.out.println(scList);
-            
+
             BuoiHocDAO buoiHocDAO = new BuoiHocDAO();
             for (SubjectClass sc : scList) {
                 List<BuoiHoc> buoiHocs = buoiHocDAO.getBuoiHocByMaLHP(sc.getMaLHP());
                 sc.setBuoiHocs(buoiHocs);
-                
 
                 // Kiểm tra xem student đã đăng ký lớp học này chưa
                 boolean isRegistered = false;
@@ -61,7 +61,7 @@
                 }
                 sc.setRegistered(isRegistered);
             }
-            
+
             session.setAttribute("subjectClasses", scList);
         }
 //        System.out.println(scList);
@@ -79,31 +79,92 @@
                 break;
             }
         }
-        System.out.println(subjectClass);
-        System.out.println(action);
-        System.out.println(maLHP);
-        if (subjectClass != null) {
-            RegistrationDAO registrationDAO = new RegistrationDAO();
-            Registration regTmp = new Registration();
-            regTmp.setHocVien(student);
-            regTmp.setLhp(subjectClass);
-            
-            
-            boolean success = registrationDAO.updateRegistrationSC(regTmp);
-            if (success) {
-                out.println("<script>alert('Đăng ký thành công!');</script>");
-            } else {
-                out.println("<script>alert('Đăng ký thất bại!');</script>");
+
+        boolean isAlreadyRegisteredInSubject = false;
+        for (SubjectClass sc : scList) {
+            if (sc.isRegistered() && sc.getMonHocMa().equals(maMon)) {
+                isAlreadyRegisteredInSubject = true;
+                break;
+            }
+        }
+
+        if (isAlreadyRegisteredInSubject) {
+
+            out.println("<script>alert('Bạn đã đăng ký một lớp học phần thuộc mã môn này. Không thể đăng ký thêm.');</script>");
+        } else {
+            System.out.println(subjectClass);
+            System.out.println(action);
+            System.out.println(maLHP);
+            if (subjectClass != null) {
+                RegistrationDAO registrationDAO = new RegistrationDAO();
+                Registration regTmp = new Registration();
+                regTmp.setHocVien(student);
+                regTmp.setLhp(subjectClass);
+
+                boolean success = registrationDAO.updateRegistrationSC(regTmp);
+
+                if (success) {
+
+                    SubjectClassDAO subjectClassDAO = new SubjectClassDAO();
+                    List<SubjectClass> updatedScList = subjectClassDAO.getSubjectClasByMa(maMon);
+
+                    BuoiHocDAO buoiHocDAO = new BuoiHocDAO();
+                    for (SubjectClass sc : updatedScList) {
+                        List<BuoiHoc> buoiHocs = buoiHocDAO.getBuoiHocByMaLHP(sc.getMaLHP());
+                        sc.setBuoiHocs(buoiHocs);
+
+                        boolean isRegistered = false;
+                        for (Registration reg : registrations) {
+                            if (reg.getLhp().getMaLHP().equals(sc.getMaLHP())) {
+                                isRegistered = true;
+                                break;
+                            }
+                        }
+                        sc.setRegistered(isRegistered);
+                    }
+                    session.setAttribute("subjectClasses", updatedScList);
+
+                    out.println("<script>");
+                    out.println("alert('Đăng ký thành công!');");
+                    out.println("window.location.href = 'Registration.jsp';");
+                    out.println("</script>");
+                } else {
+                    out.println("<script>alert('Đăng ký thất bại!');</script>");
+                }
             }
         }
     } else if ("unregister".equals(action)) {
         RegistrationDAO registrationDAO = new RegistrationDAO();
         boolean success = registrationDAO.deleteRegistration(studentId, maLHP);
+
         if (success) {
             String stuID = student.getStudentId();
             registrations = registrationDAO.getRegistrationByStudentID(stuID);
             session.setAttribute("currRegistration", registrations);
-            out.println("<script>alert('Hủy đăng ký thành công!');</script>");
+
+            SubjectClassDAO subjectClassDAO = new SubjectClassDAO();
+            List<SubjectClass> updatedScList = subjectClassDAO.getSubjectClasByMa(maMon);
+
+            BuoiHocDAO buoiHocDAO = new BuoiHocDAO();
+            for (SubjectClass sc : updatedScList) {
+                List<BuoiHoc> buoiHocs = buoiHocDAO.getBuoiHocByMaLHP(sc.getMaLHP());
+                sc.setBuoiHocs(buoiHocs);
+
+                boolean isRegistered = false;
+                for (Registration reg : registrations) {
+                    if (reg.getLhp().getMaLHP().equals(sc.getMaLHP())) {
+                        isRegistered = true;
+                        break;
+                    }
+                }
+                sc.setRegistered(isRegistered);
+            }
+            session.setAttribute("subjectClasses", updatedScList);
+
+            out.println("<script>alert('Hủy đăng ký thành công!');"
+                    + "window.location.href ='SubjectClass.jsp'; " + "</script>");
+
+            //    response.sendRedirect("SubjectClass.jsp");
         } else {
             out.println("<script>alert('Hủy đăng ký thất bại!');</script>");
         }
