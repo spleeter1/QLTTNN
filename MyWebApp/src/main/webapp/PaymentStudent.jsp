@@ -27,8 +27,9 @@
     </head>
     <body>
         <h1>Học phí</h1>
-        <form action="confirmPayment.jsp" method="post">
+        <form action="ConfirmPayment.jsp" method="post">
             <table border ="1">
+                <thead>
                 <tr>
                     <th>ID</th>
                     <th>Lớp học phần</th>
@@ -37,8 +38,9 @@
                     <th>Đã thu</th>
                     <th>Phải thu</th>
                     <th>Giá tiền</th>
-                   
+
                 </tr>
+                </thead>
                 <tbody>
                     <%
                         int totalDiscount = 0;
@@ -54,14 +56,11 @@
                         <td><%= reg.getId()%></td>
                         <td><%= reg.getLhp().getMaLHP()%></td>
                         <td><%= reg.getLhp().getTenLHP()%></td>
-                        <td>
-                            <input type="number" name="discount_<%= i%>" value="<%= reg.getDiscount()%>" 
-                                   min="0" max="<%= reg.getPrice() - reg.getPaid()%>" required />
-                        </td>
+                        <td><%= reg.getDiscount()%></td>
                         <td><%= reg.getPaid()%></td>
                         <td>
                             <input type="number" name="have_to_pay_<%= i%>" value="<%= reg.getPrice() - reg.getPaid() - reg.getDiscount()%>" 
-                                  min="0" max="<%= reg.getPrice() - reg.getPaid() - reg.getDiscount()%>" required />
+                                   min="0" max="<%= reg.getPrice() - reg.getPaid() - reg.getDiscount()%>" required />
                         </td>
                         <td><%= reg.getPrice()%></td>
                 <input type="hidden" name="id_<%= i%>" value="<%= reg.getId()%>" />
@@ -71,15 +70,16 @@
                 <tr>
                     <td colspan="3"><strong>Tổng cộng</strong></td>
                     <td><%= totalDiscount%> </td>
-                    <td></td>
+                    <td><%= totalPaid%></td>
                     <td></td>
                     <td><%= totalPrice%> </td>
                     <td></td>
                 </tr>
                 </tbody>
-                <button type="submit">Lưu</button>
+
 
             </table>
+            <button type="submit">Lưu</button>
         </form>
     </body>
 </html>
