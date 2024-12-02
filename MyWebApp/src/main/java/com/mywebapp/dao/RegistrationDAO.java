@@ -195,7 +195,7 @@ public class RegistrationDAO extends DAO {
         }
     }
 
-    public List<Registration> getStudentPaymentInfo(int studentId) {
+    public List<Registration> getStudentPaymentInfo(String studentId) {
         List<Registration> registrationList = new ArrayList<>();
         String query = """
             SELECT 
@@ -205,7 +205,8 @@ public class RegistrationDAO extends DAO {
                 lhp.tenLHP,
                 mh.ten ,
                 mh.gia ,
-                dkh.mienGiam, ,
+                dkh.mienGiam,
+                dkh.soTienThu,
                 dkh.phaiTra 
             FROM 
                 DangKyHoc dkh
@@ -218,7 +219,7 @@ public class RegistrationDAO extends DAO {
         """;
 
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, studentId);
+            ps.setString(1, studentId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     // Khởi tạo các đối tượng cần thiết
@@ -234,6 +235,7 @@ public class RegistrationDAO extends DAO {
                     registration.setHocVien(student);
                     registration.setLhp(subjectClass);
                     registration.setDiscount(rs.getLong("mienGiam"));
+                    registration.setPaid(rs.getLong("soTienThu"));
                     registration.setPrice(rs.getLong("phaiTra"));
 
                     registrationList.add(registration);

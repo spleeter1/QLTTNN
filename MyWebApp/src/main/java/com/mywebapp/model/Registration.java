@@ -14,15 +14,17 @@ public class Registration {
     private Student hocVien;
     private SubjectClass lhp;
     private long discount;
+    private long paid;
     private long price;
     public Registration() {
     }
 
-    public Registration(int id, Student hocVien, SubjectClass lhp, long discount,long price) {
+    public Registration(int id, Student hocVien, SubjectClass lhp, long discount, long paid, long price) {
         this.id = id;
         this.hocVien = hocVien;
         this.lhp = lhp;
         this.discount = discount;
+        this.paid = paid;
         this.price = price;
     }
 
@@ -65,7 +67,14 @@ public class Registration {
     public void setDiscount(long discount) {
         this.discount = discount;
     }
-    
+
+    public long getPaid() {
+        return paid;
+    }
+
+    public void setPaid(long paid) {
+        this.paid = paid;
+    }
     
     @Override
     public String toString() {
@@ -74,6 +83,7 @@ public class Registration {
                 + ", hocVien=" +  hocVien.getStudentId()
                 + ", lhp=" + lhp.getMaLHP()
                 + ", giam=" + discount
+                + ", soTienThu=" + paid
                 + ", phaiTra=" + price
                 + "}\n";
     }
